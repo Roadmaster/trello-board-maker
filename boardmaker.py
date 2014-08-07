@@ -23,7 +23,6 @@ from trello import *
 from storyparser import parse_stories
 import sys
 import time
-
 # Needed:
 # - name of a file containing stories (see storyparser)
 # - trello API key and security token (see trello)
@@ -54,7 +53,6 @@ try:
         stories = parse_stories(file)
 except (FileNotFoundError, IOError):
     print(sys.exc_info()[1])
-
 t = Trello(args.key, args.token)
 
 # Create a new :board with :name under :organization

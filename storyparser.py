@@ -65,6 +65,8 @@ def parse_story(lines):
     """
     fields = ["size", "definition-of-done", "demo-lead"]
     lines = [line.strip() for line in lines]
+    if not lines:
+        return None
     matches = re.match("Story (?P<number>\d+) - (?P<description>.+)", lines[0])
     if matches:
         number = matches.group('number')
@@ -75,9 +77,10 @@ def parse_story(lines):
     result = {"story_number": number, "story_description": description,
               'story_tasks': [], "story_fields": {}}
     for l in lines[1:]:
-        field_matches = re.match(r"(?P<field_name>.+): (?P<field_data>.+)", l)
+        field_matches = re.match(r"(?P<field_name>.+?): (?P<field_data>.+)", l)
         matched_known_field = False
         if field_matches:
+            print (field_matches.group('field_name'))
             for field in fields:
                 if field == field_matches.group('field_name'):
                     result['story_fields'][field] = field_matches.group('field_data')

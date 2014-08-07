@@ -36,6 +36,8 @@ class Trello():
         self._token = token
         self._base_url = base_url
 
+    # TODO: All the run methods need to print result.content if
+    # the return code is not 200.
     def do_get(self, rest_path, params=None):
         url_params = {"base_url": self._base_url,
                       "rest_path": rest_path,
