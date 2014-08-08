@@ -21,6 +21,7 @@ import argparse
 
 from trello import *
 from storyparser import parse_stories
+import pprint
 import sys
 import time
 # Needed:
@@ -41,6 +42,8 @@ parser.add_argument("--org", type=str,
                     default='canonical')
 parser.add_argument("--name", type=str, help='Name of the board.',
                     default="Iteration starting {}".format(time.strftime("%Y-%m-%d")))
+parser.add_argument("--parse-only", help="Whether to only parse and show stories",
+                    action='store_true', default=False)
 
 args = parser.parse_args()
 
@@ -53,7 +56,12 @@ try:
         stories = parse_stories(file)
 except (FileNotFoundError, IOError):
     print(sys.exc_info()[1])
+if args.parse_only:
+    pp = pprint.PrettyPrinter().pprint
+    pp(stories)
+    raise SystemExit
 t = Trello(args.key, args.token)
+
 
 # Create a new :board with :name under :organization
 org = t.get_organization(args.org)
