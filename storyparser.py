@@ -51,7 +51,9 @@ def parse_stories(stream):
             buffer = []
         else:
             buffer.append(line)
-
+    # End of file! Parse one last time
+    if buffer:
+        stories.append(parse_story(buffer))
     return stories
 
 def parse_story(lines):
@@ -80,7 +82,6 @@ def parse_story(lines):
         field_matches = re.match(r"(?P<field_name>.+?): (?P<field_data>.+)", l)
         matched_known_field = False
         if field_matches:
-            print (field_matches.group('field_name'))
             for field in fields:
                 if field == field_matches.group('field_name'):
                     result['story_fields'][field] = field_matches.group('field_data')
