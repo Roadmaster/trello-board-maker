@@ -54,6 +54,7 @@ stories = None
 try:
     with open(args.file) as file:
         stories = parse_stories(file)
+        assert(None not in stories)
 except (FileNotFoundError, IOError):
     print(sys.exc_info()[1])
 if args.parse_only:

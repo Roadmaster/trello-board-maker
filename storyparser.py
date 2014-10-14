@@ -47,12 +47,14 @@ def parse_stories(stream):
     for line in stream.readlines():
         if (re.match("^ *$", line)):
             # proces teh bufer
-            stories.append(parse_story(buffer))
+            story = parse_story(buffer)
+            if story:
+                stories.append(story)
             buffer = []
         else:
             buffer.append(line)
     # End of file! Parse one last time
-    if buffer:
+    if buffer and parse_story(buffer):
         stories.append(parse_story(buffer))
     return stories
 
