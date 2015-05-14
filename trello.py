@@ -30,6 +30,12 @@ import requests
 # Organization -> member
 # Board -> list -> card -> checklist -> task
 
+class TrelloApiError(Exception):
+    """
+    This is raised if the Trello API returns an error.
+    Mainly used for "invalid token"
+    """
+
 class Trello():
     def __init__(self, key, token, base_url="https://api.trello.com/1"):
         self._key = key
@@ -45,10 +51,18 @@ class Trello():
                       "token": self._token}
         url = "{base_url}/{rest_path}?key={key}&token={token}".format(**url_params)
         if params:
-            for (name,value) in params.items():
-                url = url + "&{}={}".format(name,value)
+            for (name, value) in params.items():
+                url = url + "&{}={}".format(name, value)
         result = requests.get(url)
-        return result.json()
+        try:
+            return result.json()
+        except ValueError as e:
+            if result.status_code == 401:
+                raise TrelloApiError(
+                    "Possible Trello API access problem: {}".format(
+                        result.text))
+            else:
+                raise e
 
     def do_put(self, rest_path, put_vars=None):
         params = {"key": self._key,

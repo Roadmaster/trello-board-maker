@@ -65,8 +65,13 @@ t = Trello(args.key, args.token)
 
 
 # Create a new :board with :name under :organization
-org = t.get_organization(args.org)
-board = org.create_board(args.name)
+try:
+    org = t.get_organization(args.org)
+    board = org.create_board(args.name)
+except TrelloApiError as e:
+    print("Unable to read/write Trello data. Maybe the credentials"
+          " are expired? Error was: {}".format(e))
+    raise SystemExit
 
 # Set meaningful names for the labels
 label_names = {
