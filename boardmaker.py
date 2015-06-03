@@ -50,6 +50,15 @@ parser.add_argument("--parse-only",
 
 args = parser.parse_args()
 
+
+MEMBER_USERNAMES_TO_SUBSCRIBE = [
+    'arapulido', 'danielmanrique', 'sylvainpineau',
+    'caiobegotti', 'chrisgregan2', 'chriswayne',
+    'jamesjesudason1', 'jonathancave1',
+    'maciejkisielewski', 'pierreequoy1', 'pohsulin',
+    'shawnwang13', 'sylvainpineau', 'tai271828',
+    'kaxing', 'zygmuntkrynicki', 'smiguez']
+
 # Colors arranged by priority
 colors = ['red', 'orange', 'yellow', 'purple', 'green', 'blue']
 stories = None
@@ -87,13 +96,14 @@ label_names = {
 for label, name in label_names.items():
     board.set_label_name(label, name)
 
-# Add all members of organization to board.
+# Add desired members of organization to board.
 member_ids_in_board = [m.id for m in board.members]
 for member in org.members:
     # Actually, only add those not already there.  The creator will already be
     # there and be an admin, and trello will complain if we try to switch him
     # to a normal user by just re-adding him.
-    if member.id not in member_ids_in_board:
+    if (member.username in MEMBER_USERNAMES_TO_SUBSCRIBE and
+       member.id not in member_ids_in_board):
         print("Adding {} to board".format(member))
         board.add_member(member, type="normal")
 # Close all existing pre-created lists
