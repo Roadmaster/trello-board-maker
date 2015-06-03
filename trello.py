@@ -128,7 +128,7 @@ class Organization(TrelloBase):
         create_url = "boards"
         params = {'name': board_name,
                   'idOrganization': self.id,
-                  'prefs_permissionLevel': 'private'}
+                  'prefs_permissionLevel': 'org'}
         board_data = self._trello.do_post(create_url, params)
         board = Board(self._trello, board_data)
         return board
@@ -146,6 +146,10 @@ class Member(TrelloBase):
     @property
     def member_type(self):
         return self._data.get('memberType', None)
+
+    @property
+    def username(self):
+        return self._data.get('username', None)
 
 
 class List(TrelloBase):
