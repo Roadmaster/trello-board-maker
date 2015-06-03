@@ -30,19 +30,22 @@ import time
 # - Name of the organization in trello
 # - name for the new board
 
-parser = argparse.ArgumentParser(description="Create a Trello board for "
-        "the certification team scrum iteration.",
-        epilog="To obtain the API key and security token, see notes.rst")
-
+parser = argparse.ArgumentParser(
+    description="Create a Trello board for "
+    "the certification team scrum iteration.",
+    epilog="To obtain the API key and security token, see notes.rst")
 parser.add_argument("key", type=str, help='Trello API key')
 parser.add_argument("token", type=str, help='Trello API security token')
-parser.add_argument("file", type=str, help='File containing stories with tasks')
+parser.add_argument("file", type=str,
+                    help='File containing stories with tasks')
 parser.add_argument("--org", type=str,
                     help='Name of the organization as known by Trello.',
                     default='canonical')
 parser.add_argument("--name", type=str, help='Name of the board.',
-                    default="Iteration starting {}".format(time.strftime("%Y-%m-%d")))
-parser.add_argument("--parse-only", help="Whether to only parse and show stories",
+                    default="Iteration starting {}".format(
+                        time.strftime("%Y-%m-%d")))
+parser.add_argument("--parse-only",
+                    help="Whether to only parse and show stories",
                     action='store_true', default=False)
 
 args = parser.parse_args()
@@ -82,7 +85,7 @@ label_names = {
     'blue': 'Priority 5',
     'green': 'Priority 6 (low)'}
 for label, name in label_names.items():
-   board.set_label_name(label, name)
+    board.set_label_name(label, name)
 
 # Add all members of organization to board.
 member_ids_in_board = [m.id for m in board.members]
@@ -111,7 +114,8 @@ for idx, story in enumerate(stories):
         pass
     name = "{story_number} - {story_description}".format(**story)
     if 'story_fields' in story:
-        desc = "\n".join(["{}: {}".format(k,story['story_fields'][k]) for k in story['story_fields'].keys()]) 
+        desc = "\n".join(["{}: {}".format(k, story['story_fields'][k])
+                          for k in story['story_fields'].keys()])
     card = initial_list.create_card(name, desc, label=label)
     print("  Added story {}".format(story['story_number']))
     checklist = card.create_checklist(desc, name="Story tasks")
